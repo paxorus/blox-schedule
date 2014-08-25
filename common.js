@@ -33,6 +33,8 @@ function decrypt(){
 		}
 	    if(course.trans){
 	        newdiv.style.opacity=0.5;
+	    }else{
+	    	newdiv.style.opacity=1.0;
 	    }
 
 	    for(var loop4=0;loop4<=course.times.length-1;loop4++){// for each time span, make block
