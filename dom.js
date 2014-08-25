@@ -1,12 +1,24 @@
+var containDays=document.getElementById("containDays");
+var contain=document.getElementById("contain");
+var dropdown=document.getElementById("dropdown");
+var textInput=document.getElementById("textInput");
+
 var days_width,days_height,time_height;
 
 var newdiv=newDiv();
 newdiv.className="block";
+dropdown.onchange=function(ev){
+	textInput.value=query_results[parseInt(this.value,10)].get("schedule");
+	decrypt();
+	console.log("yo");
+}
+
+
+window.onresize=function(){location.reload();console.log(5)};
+
 
 function setup(){
 	// adjust grey container, 25px padding
-	var containDays=document.getElementById("containDays");
-	var contain=document.getElementById("contain");
 	var contain_width=Math.floor((window.innerWidth-66)/8)*8;// -50 for space, -16 for body, fixed as multiple of 8
 	var contain_height=Math.floor((window.innerHeight-108)/16)*16+2;// -50 for space, -16 for body, -42 for header (16 times)
 	containDays.style.width=contain_width;
@@ -50,6 +62,5 @@ function setup(){
 	contain.appendChild(lineNode.cloneNode(true));
 }setup();
 
-window.onresize=function(){location.reload();console.log(5)};
+
 // decrypt-->createClass,plot
-decrypt();

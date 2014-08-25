@@ -1,5 +1,28 @@
+var blox;
+
+function savify(){// 'Save to Cloud'
+	var obj=query_results[parseInt(dropdown.value,10)];
+	obj.set("schedule",text_input);
+}
+
+function toggleDisplay(style){
+	if(style.display=="block"){
+		style.display="none";
+		edit.textContent="Edit";
+		decrypt();
+	}else{
+		style.display="block";
+		edit.textContent="Done";
+	}
+}
+
 function decrypt(){
+	// delete old blox
+	$(".block").remove();
+
+	// data to blox
 	var course;
+	var course_data=textInput.value.split(",");
 	for(var loop3=0;course=course_data[loop3];loop3++){// for each course_data string
 	    course=createClass(course.split(";"));
 	    // customize newdiv and then plot
@@ -51,7 +74,6 @@ function Class(name,color,time_str,place){// four strings from split(';')
 }
 
 function createClass(data_arr){
-	console.log(data_arr);
 	return new Class(data_arr[0],data_arr[1],data_arr[2],data_arr[3]);
 }
 
@@ -62,6 +84,20 @@ function pushAllDays(array,multiday_str,index){
     for(var i=0;i<day_numbers.length;i++){
     	array.push(day_numbers[i]+"~"+hours);
     }
+}
+
+function loadOptions(scheds){
+	for(var k=0;k<scheds.length;k++){
+		var op=document.createElement("option");
+		op.textContent=scheds[k].get("name");
+		op.value=k;
+		dropdown.appendChild(op);
+	}
+
+	var index=parseInt(localStorage.default,10) || 0;
+	textInput.value=scheds[index].get("schedule");
+	
+	decrypt();
 }
 
 function newDiv(){
