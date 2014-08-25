@@ -2,6 +2,7 @@ var containDays=document.getElementById("containDays");
 var contain=document.getElementById("contain");
 var dropdown=document.getElementById("dropdown");
 var textInput=document.getElementById("textInput");
+var title=document.getElementsByTagName("title")[0];
 
 var days_width,days_height,time_height;
 
@@ -9,6 +10,7 @@ var newdiv=newDiv();
 newdiv.className="block";
 dropdown.onchange=function(ev){
 	textInput.value=query_results[parseInt(this.value,10)].get("schedule");
+	title.textContent="::"+query_results[parseInt(this.value,10)].get("name")+"::";
 	decrypt();
 }
 

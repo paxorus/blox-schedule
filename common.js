@@ -97,7 +97,8 @@ function loadOptions(scheds){
 
 	var index=parseInt(localStorage.default,10) || 0;
 	textInput.value=scheds[index].get("schedule");
-	
+	dropdown.childNodes[index].selected=true;
+	title.textContent="::"+scheds[index].get("name")+"::";
 	decrypt();
 }
 
