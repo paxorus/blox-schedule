@@ -31,20 +31,22 @@ body{font-family:Verdana}
 
 <script src="common.js"></script>
 <script>
-var course_data=[
-    "Hindi 10a;#80C;134(9~10);???",
-    "Discrete;#8C0;134(13~14);???",
-    "Cbio 101a;#08C;134(12~13);???",
-    "Phys 19a;#80C;1~15.5~16.5;???",
-    "Probio;#08C;2~14.5~16+4~14.5~16;???",
-    "Data;#8C0;13(14~15.5);???",
-    "Hindi 10a;#80C;134(9~10);???",
-    "Discrete;#8C0;134(13~14);???",
-    "Cbio 101a;#08C;134(12~13);???",
-    "Phys 19a;#80C;1~15.5~16.5;???",
-    "Probio;#08C;2~14.5~16+4~14.5~16;???",
-    "Data;#8C0;13(14~15.5);???"
-];
+var course_data;
+if(false){
+    course_data=localStorage.blox.split(',');
+}else{
+    course_data=localStorage.blox=[
+        "Biol 14a;#80C;134(9~10);???",
+        "Chem 25a;#80C;134(11~12)+2~18.5~20.5;???",
+        "Phys 11a;#80C;134(12~13)+1~18.5~21.5;poo",
+        "Math 36a;#80C;134(13~14);???",
+        "Chem 29a;#80C;5(11~12.5)+5(13~17.5);???",
+        "Nphy 115a;#80C;24(14~15.5);???",
+        "Clas 100a;#80C;13(14~15.5);???",
+        "Phys 19a;#80C;1~15.5~16.5;???"
+    ];
+}
+
 
 </script>
 

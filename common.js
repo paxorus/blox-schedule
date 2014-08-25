@@ -5,7 +5,7 @@ function decrypt(){
 	    // customize newdiv and then plot
 	    newdiv.style.backgroundColor=course.color;
 	    if(course.place!="???"){
-		    newdiv.title=Course.place;
+		    newdiv.title=course.place;
 		}
 	    if(course.trans){
 	        newdiv.style.opacity=0.5;
@@ -38,7 +38,7 @@ function Class(name,color,time_str,place){// four strings from split(';')
     this.color=color;
     this.place=place;
     this.times=[];
-    var times=time_str.split(',');
+    var times=time_str.split('+');
 
     for(var i=0;i<times.length;i++){// for each in "134(13~14),5(12.5~14)"
     	var index=times[i].indexOf("(");
@@ -51,6 +51,7 @@ function Class(name,color,time_str,place){// four strings from split(';')
 }
 
 function createClass(data_arr){
+	console.log(data_arr);
 	return new Class(data_arr[0],data_arr[1],data_arr[2],data_arr[3]);
 }
 
