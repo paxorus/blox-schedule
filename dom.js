@@ -10,11 +10,10 @@ newdiv.className="block";
 dropdown.onchange=function(ev){
 	textInput.value=query_results[parseInt(this.value,10)].get("schedule");
 	decrypt();
-	console.log("yo");
 }
 
 
-window.onresize=function(){location.reload();console.log(5)};
+window.onresize=function(){location.reload()};
 
 
 function setup(){

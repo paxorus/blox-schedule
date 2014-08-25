@@ -2,7 +2,8 @@ var blox;
 
 function savify(){// 'Save to Cloud'
 	var obj=query_results[parseInt(dropdown.value,10)];
-	obj.set("schedule",text_input);
+	obj.set("schedule",textInput.value);
+	obj.save();
 }
 
 function toggleDisplay(style){
