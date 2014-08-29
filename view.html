@@ -31,10 +31,14 @@ body{font-family:Verdana}
 </div>
 
 <select id="dropdown"></select>
-<button id="makeDef" onclick="localStorage.default=dropdown.value">Make Default</button>
+<!--<button id="save" onclick="localStorage.default=dropdown.value">Make Default</button>
 <button id="save" onclick="savify()">Save</button>
 <button id="edit" onclick="toggleDisplay(textInput.style)">Edit</button>
-<textarea id="textInput" style="display:none"></textarea>
+<textarea id="textInput" style="display:none"></textarea>-->
+<div id="makeDef" style="display:none"></div>
+<div id="save" style="display:none"></div>
+<div id="edit" style="display:none"></div>
+<div id="textInput" style="display:none"></div>
 
 <script src="common.js"></script>
 <script>

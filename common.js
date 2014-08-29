@@ -30,6 +30,8 @@ function decrypt(){
 	    newdiv.style.backgroundColor=course.color;
 	    if(course.place!="???"){
 		    newdiv.title=course.place;
+		}else if(newdiv.title){
+			newdiv.removeAttribute("title");
 		}
 	    if(course.trans){
 	        newdiv.style.opacity=0.5;
