@@ -91,15 +91,22 @@ function pushAllDays(array,multiday_str,index){
     }
 }
 
+var sched_names;
 function loadOptions(scheds){
+	sched_names=[];
 	for(var k=0;k<scheds.length;k++){
 		var op=document.createElement("option");
-		op.textContent=scheds[k].get("name");
+		sched_names.push(op.textContent=scheds[k].get("name"));
 		op.value=k;
 		dropdown.appendChild(op);
 	}
 
-	var index=parseInt(localStorage.default,10) || 0;
+	var index;
+	if((index=localStorage.default) && sched_names.indexOf(index)>=0){
+		index=sched_names.indexOf(index);
+	}else{
+		index=0;
+	}
 	textInput.value=scheds[index].get("schedule");
 	dropdown.childNodes[index].selected=true;
 	title.textContent="::"+scheds[index].get("name")+"::";
@@ -108,4 +115,8 @@ function loadOptions(scheds){
 
 function newDiv(){
 	return document.createElement("div");
+}
+function localStore(){// upon 'Make Default'
+	var index=parseInt(dropdown.value,10);
+	localStorage.default=sched_names[index];
 }

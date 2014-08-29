@@ -30,11 +30,12 @@ body{font-family:Verdana}
 <div id="contain"><!--contain_width x contain_height-->
 </div>
 
-<select id="dropdown"></select>
-<!--<button id="save" onclick="localStorage.default=dropdown.value">Make Default</button>
+<!--<select id="dropdown"></select>
+<button id="save" onclick="localStorage.default=dropdown.value">Make Default</button>
 <button id="save" onclick="savify()">Save</button>
 <button id="edit" onclick="toggleDisplay(textInput.style)">Edit</button>
 <textarea id="textInput" style="display:none"></textarea>-->
+<div id="dropdown" style="display:none"></div>
 <div id="makeDef" style="display:none"></div>
 <div id="save" style="display:none"></div>
 <div id="edit" style="display:none"></div>
@@ -48,6 +49,7 @@ var blox_schedule=new BloxSchedule();
 var query=new Parse.Query("BloxSchedule");
 var query_results;
 
+localStorage.default="prakhar";
 query.notEqualTo("name","test");
 query.find({
     success:function(results){

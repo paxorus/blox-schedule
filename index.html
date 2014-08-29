@@ -31,7 +31,7 @@ body{font-family:Verdana}
 </div>
 
 <select id="dropdown"></select>
-<button id="makeDef" onclick="localStorage.default=dropdown.value">Make Default</button>
+<button id="makeDef" onclick="localStore()">Make Default</button>
 <button id="save" onclick="savify()">Save</button>
 <button id="edit" onclick="toggleDisplay(textInput.style)">Edit</button>
 <textarea id="textInput" style="display:none"></textarea>
@@ -51,6 +51,7 @@ query.find({
         loadOptions(query_results);
     }
 });
+
 </script>
 
 <script src="dom.js"></script>
