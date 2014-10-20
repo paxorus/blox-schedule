@@ -9,12 +9,7 @@ var days_width,days_height,time_height;
 var newdiv=newDiv();
 newdiv.className="block";
 dropdown.onchange=function(ev){
-	var index;
-	if(sched_names.indexOf(index)>=0){
-		index=sched_names.indexOf(index);
-	}else{
-		index=0;
-	}
+	var index=ev.target.value;
 	textInput.value=query_results[index].get("schedule");
 	title.textContent="::"+query_results[parseInt(this.value,10)].get("name")+"::";
 	decrypt();
