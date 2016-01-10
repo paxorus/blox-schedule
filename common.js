@@ -1,7 +1,7 @@
 var blox;
 
 function savify(){// 'Save to Cloud'
-	var obj=query_results[parseInt(dropdown.value,10)];
+	var obj=queryResults[parseInt(dropdown.value,10)];
 	obj.set("schedule",textInput.value);
 	obj.save();
 }
@@ -22,10 +22,10 @@ function decrypt(){
 	$(".block").remove();
 
 	// data to blox
-	var course;
-	var course_data=textInput.value.split(",");
-	for(var loop3=0;course=course_data[loop3];loop3++){// for each course_data string
-	    course=createClass(course.split(";"));
+	var courses=textInput.value.split(",");
+	for(var i in courses){// for each courseData string
+		var data=courses[i].split(";");
+		var course=new Class(data[0],data[1],data[2],data[3]);
 	    // customize newdiv and then plot
 	    newdiv.style.backgroundColor=course.color;
 	    if(course.place!="???"){
@@ -33,14 +33,9 @@ function decrypt(){
 		}else if(newdiv.title){
 			newdiv.removeAttribute("title");
 		}
-	    if(course.trans){
-	        newdiv.style.opacity=0.5;
-	    }else{
-	    	newdiv.style.opacity=1.0;
-	    }
-
-	    for(var loop4=0;loop4<=course.times.length-1;loop4++){// for each time span, make block
-	        plot(newdiv,course.times[loop4],course.name);
+	    newdiv.style.opacity=(course.trans)?0.5:1.0;// set opacity
+	    for(var j in course.times){
+	    	plot(newdiv,course.times[j],course.name);// for each time span, make block
 	    }
 	}
 }
@@ -78,11 +73,6 @@ function Class(name,color,time_str,place){// four strings from split(';')
     }
 }
 
-function createClass(data_arr){
-	return new Class(data_arr[0],data_arr[1],data_arr[2],data_arr[3]);
-}
-
-
 function pushAllDays(array,multiday_str,index){
     var day_numbers=multiday_str.substring(0,index);// "134"
     var hours=multiday_str.substring(index+1,multiday_str.length-1);// "13~14"
@@ -91,19 +81,19 @@ function pushAllDays(array,multiday_str,index){
     }
 }
 
-var sched_names;
+var schedNames;
 function loadOptions(scheds){
-	sched_names=[];
+	schedNames=[];
 	for(var k=0;k<scheds.length;k++){
 		var op=document.createElement("option");
-		sched_names.push(op.textContent=scheds[k].get("name"));
+		schedNames.push(op.textContent=scheds[k].get("name"));
 		op.value=k;
 		dropdown.appendChild(op);
 	}
 
 	var index;
-	if((index=localStorage.default) && sched_names.indexOf(index)>=0){
-		index=sched_names.indexOf(index);
+	if((index=localStorage.default) && schedNames.indexOf(index)>=0){
+		index=schedNames.indexOf(index);
 	}else{
 		index=0;
 	}
@@ -118,5 +108,22 @@ function newDiv(){
 }
 function localStore(){// upon 'Make Default'
 	var index=parseInt(dropdown.value,10);
-	localStorage.default=sched_names[index];
+	localStorage.default=schedNames[index];
+}
+function deleteSchedule(){
+	if(confirm("Are you sure?")){
+		var index=parseInt(dropdown.value,10);
+		queryResults[index].destroy({
+			success:function(obj){location.reload()}
+		});
+	}
+}
+function cloneSchedule(){
+	var bloxSchedule=new BloxSchedule();
+	var name=prompt("Enter a name for the new schedule:");
+	bloxSchedule.set("name",name);
+	bloxSchedule.set("schedule",textInput.value);
+	bloxSchedule.save({
+		success:function(obj){location.reload()}
+	});
 }

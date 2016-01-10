@@ -10,8 +10,9 @@ var newdiv=newDiv();
 newdiv.className="block";
 dropdown.onchange=function(ev){
 	var index=ev.target.value;
-	textInput.value=query_results[index].get("schedule");
-	title.textContent="::"+query_results[parseInt(this.value,10)].get("name")+"::";
+	var currentObj=queryResults[index];
+	textInput.value=currentObj.get("schedule");
+	title.textContent="::"+currentObj.get("name")+"::";
 	decrypt();
 }
 

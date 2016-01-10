@@ -34,21 +34,23 @@ body{font-family:Verdana}
 <button id="makeDef" onclick="localStore()">Make Default</button>
 <button id="save" onclick="savify()">Save</button>
 <button id="edit" onclick="toggleDisplay(textInput.style)">Edit</button>
+<button id="delete" onclick="deleteSchedule()">Delete</button>
+<button id="clone" onclick="cloneSchedule()">Clone</button>
 <textarea id="textInput" style="display:none"></textarea>
 
 <script src="common.js"></script>
 <script>
 Parse.initialize("cALqdsddeWt4oIctybVWtDPa7MnWQuhZjEdXsQHn","hX5H5BnVA1gu8Ue2W0P34bl9bDm3t3mkIMWNYDs0");
 var BloxSchedule=Parse.Object.extend("BloxSchedule");// class
-var blox_schedule=new BloxSchedule();
+// var blox_schedule=new BloxSchedule();
 var query=new Parse.Query("BloxSchedule");
-var query_results;
+var queryResults;
 
 query.notEqualTo("name","test");
 query.find({
     success:function(results){
-        query_results=results;
-        loadOptions(query_results);
+        queryResults=results;
+        loadOptions(queryResults);
     }
 });
 
