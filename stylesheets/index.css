@@ -1,0 +1,42 @@
+body {
+	font-family: Verdana
+}
+#containDays, #contain {
+	background-color: #CCC;
+	position: absolute;
+	left: 33px;/*25 rel to body,33 abs*/
+}
+#containDays {
+	height: 40px;
+	top: 33px;
+	}
+#contain {
+	top: 73px
+}
+#textInput {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+.days {
+	text-align: center;
+	float: left;
+	padding: 10px;
+	background-color: #CCC;
+	font-size: 18px;
+}
+.time {
+	text-align: center;
+}
+.line {
+	position: relative;
+	background-color: #AAA;
+	height: 2px
+}
+.block {
+	position: absolute;
+	color: white;
+	text-align: center;
+	border-radius: 5px;
+	padding: 0 10px;
+}

@@ -1,20 +1,10 @@
-<html><head>
-<style>
-body{font-family:Verdana}
-#containDays,#contain{background-color:#CCC;position:absolute;left:33px}/*25 rel to body,33 abs*/
-#containDays{height:40px;top:33px;}
-#contain{top:73px}
-#textInput{position:absolute;top:0;right:0;}
-.days{text-align:center;float:left;padding:10px;background-color:#CCC;font-size:18px;}
-.time{text-align:center;}
-.line{position:relative;background-color:#AAA;height:2px}
-.block{position:absolute;color:white;text-align:center;border-radius:5px;padding:0 10px;}
-</style>
-<title>Weekly Schedule</title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
-<script src="https://www.parsecdn.com/js/parse-1.2.19.min.js"></script>
-
-</head><body>
+<html>
+<head>
+    <title>Weekly Schedule</title>
+    <link rel="stylesheet" href="stylesheets/index.css">
+    <link href="images/mongo.ico" rel="shortcut icon">
+</head>
+<body>
 
 <div id="containDays"><!--contain_width x 40-->
     <div class="days">Times</div>
@@ -38,7 +28,9 @@ body{font-family:Verdana}
 <button id="clone" onclick="cloneSchedule()">Clone</button>
 <textarea id="textInput" style="display:none"></textarea>
 
-<script src="common.js"></script>
+<script src="javascripts/jquery.js"></script>
+<script src="https://www.parsecdn.com/js/parse-1.2.19.min.js"></script>
+<script src="javascripts/common.js"></script>
 <script>
 Parse.initialize("cALqdsddeWt4oIctybVWtDPa7MnWQuhZjEdXsQHn","hX5H5BnVA1gu8Ue2W0P34bl9bDm3t3mkIMWNYDs0");
 var BloxSchedule=Parse.Object.extend("BloxSchedule");// class
@@ -56,6 +48,6 @@ query.find({
 
 </script>
 
-<script src="dom.js"></script>
+<script src="javascripts/dom.js"></script>
 </body>
 </html>
