@@ -1,0 +1,29 @@
+{
+  "name": "blox",
+  "version": "1.0.0",
+  "description": "Weekly schedule on the cloud",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paxorus/blox.git"
+  },
+  "keywords": [
+    "node",
+    "schedule",
+    "manager",
+    "mongodb",
+    "express"
+  ],
+  "author": "Prakhar Sahay",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/paxorus/blox/issues"
+  },
+  "homepage": "https://github.com/paxorus/blox#readme",
+  "dependencies": {
+    "express": "^4.14.0"
+  }
+}

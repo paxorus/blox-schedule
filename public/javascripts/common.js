@@ -1,4 +1,4 @@
-var blox;
+// var blox;
 
 function savify(){// 'Save to Cloud'
 	var obj=queryResults[parseInt(dropdown.value,10)];
@@ -23,14 +23,14 @@ function toggleDisplay(style){
  */
 
 function decrypt(){
-	// delete old blox
+	// clear current schedule
 	$(".block").remove();
 
 	// data -> blox
 	var courses = textInput.value.split(",");
 	for(var i in courses){// for each courseData string
-		var data=courses[i].split(";");
-		var course=new Class(data[0],data[1],data[2],data[3]);
+		var data = courses[i].split(";");
+		var course = new Class(data[0],data[1],data[2],data[3]);
 
 	    // customize newdiv and then plot
 

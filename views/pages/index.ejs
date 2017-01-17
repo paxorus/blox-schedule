@@ -38,7 +38,7 @@ var blox_schedule=new BloxSchedule();
 var query=new Parse.Query("BloxSchedule");
 var queryResults;
 
-localStorage.default="prakhar";
+localStorage.default = "<%= scheduleId %>";
 query.notEqualTo("name","test");
 query.find({
     success:function(results){
