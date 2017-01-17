@@ -1,69 +1,72 @@
-var containDays=document.getElementById("containDays");
-var contain=document.getElementById("contain");
-var dropdown=document.getElementById("dropdown");
-var textInput=document.getElementById("textInput");
-var title=document.getElementsByTagName("title")[0];
+/** Prakhar Sahay 08/24/2014
 
-var days_width,days_height,time_height;
+*/
 
-var newdiv=newDiv();
-newdiv.className="block";
-dropdown.onchange=function(ev){
-	var index=ev.target.value;
-	var currentObj=queryResults[index];
-	textInput.value=currentObj.get("schedule");
-	title.textContent="::"+currentObj.get("name")+"::";
+/**
+ * Switches schedules based on dropdown value
+ */
+$("#dropdown").change(function(ev){
+	var obj = queryResults[ev.target.value];
+	$("#textInput").val(obj.get("schedule"));
+	$("title").text("::" + obj.get("name") + "::");
 	decrypt();
-}
+});
+
+/**
+ * TODO: reposition DOM elements instead of page reload
+ */
+window.onresize=function(){
+	location.reload();
+};
 
 
-window.onresize=function(){location.reload()};
-
-
+/**
+ * 
+ */
 function setup(){
 	// adjust grey container, 25px padding
-	var contain_width=Math.floor((window.innerWidth-66)/8)*8;// -50 for space, -16 for body, fixed as multiple of 8
-	var contain_height=Math.floor((window.innerHeight-108)/16)*16+2;// -50 for space, -16 for body, -42 for header (16 times)
-	containDays.style.width=contain_width;
-	contain.style.width=contain_width;
-	contain.style.height=contain_height;
+	var contain = $("#contain");
 
-	// adjust days headers
-	var days=containDays.getElementsByClassName("days");
-	days_width=contain_width/8-20;
-	days_height=20;
+	// -50 for space, -16 for body, fixed as multiple of 8	
+	var contain_width = Math.floor((window.innerWidth - 66) / 8) * 8;
+	// -50 for space, -16 for body, -42 for header (16 times)
+	var contain_height = Math.floor((window.innerHeight - 108) / 16) * 16 + 2;
+	window.TIME_HEIGHT = (contain_height - 2) / 16 - 2;
+	window.DAYS_WIDTH = contain_width / 8 - 20;
+	window.DAYS_HEIGHT = 20;
 
-	for(var i=0;i<days.length;i++){
-		days[i].style.width=days_width;
-		days[i].style.height=days_height;
-	}
+	$("#containDays").width(contain_width);
+	contain.width(contain_width);
+	contain.height(contain_height);
+
+	$(".days").width(window.DAYS_WIDTH);
+	$(".days").height(window.DAYS_HEIGHT);
 
 	// adjust line left and width
-	var line=newDiv();
-	line.className="line";
-	line.style.width=7/8*contain_width;
-	line.style.left=contain_width/8;
+	var line = $("<div>", {class: "line", width: 7 / 8 * contain_width});
+	line.css("left", contain_width / 8);
 
-	var time=newDiv();
-	time.className="time";
-	time_height=(contain_height-2)/16-2;
-	time.style.height=time.style.lineHeight=time_height+"px";
+	var time = $("<div>", {class: "time"});
+	time.height(window.TIME_HEIGHT);
+	time.css("line-height", window.TIME_HEIGHT + "px");
+	time.width(contain_width / 8);
 
 	// add pairs of lineNode>line and timeNode>time
 
-	var lineNode=newDiv();
-	lineNode.appendChild(line.cloneNode());
-	var timeNode=newDiv();
-	timeNode.style.width=contain_width/8;
-	timeNode.appendChild(time.cloneNode());
+	var lineNode=$("<div>");
+	lineNode.append(line.clone());
 
-	for(var j=0;j<16;j++){
-		contain.appendChild(lineNode.cloneNode(true));
-		timeNode.firstChild.textContent=(j+8)%12+"-"+(j+9)%12;
-		contain.appendChild(timeNode.cloneNode(true));
+	var timeNode=$("<div>");
+
+	for (var j = 0; j < 16; j ++) {
+		var hourRange = (j + 8) % 12 + "-" + (j + 9) % 12;// "5-6"
+		var newTime = time.clone();
+		newTime.text(hourRange);
+		var newTimeNode = timeNode.clone();
+		newTimeNode.append(newTime);
+
+		contain.append(lineNode.clone());
+		contain.append(newTimeNode);
 	}
-	contain.appendChild(lineNode.cloneNode(true));
-}setup();
-
-
-// decrypt-->createClass,plot
+	contain.append(lineNode.clone());
+}
