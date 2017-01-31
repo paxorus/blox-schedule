@@ -29,6 +29,7 @@
   "homepage": "https://github.com/paxorus/blox#readme",
   "dependencies": {
     "ejs": "2.3.3",
-    "express": "^4.14.0"
+    "express": "^4.14.0",
+    "mongodb": "2.2.22"
   }
 }

@@ -6,14 +6,10 @@
 
 var express = require('express');
 var app = express();
-// var querystring = require('querystring');
-// var Mongo = require('./MongoHelper');
+var Mongo = require('./MongoHelper');
 
 app.set('port', (process.env.PORT || 5000));
-
 app.use(express.static(__dirname + '/public'));
-
-// views is directory for all template files
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
@@ -22,11 +18,38 @@ app.get('/', function(req, res) {
 });
 
 app.get('/admin', function(req, res) {
-	res.render('pages/admin');// should send username and password
+	res.render('pages/admin');// should require username and password
 });
 
-// db lookup should happen for below page loads, for now page will access localStorage
+app.get('/schedule/:scheduleId', function (req, res) {
+	Mongo.data({name: req.params.scheduleId})
+	.then(Mongo.connect('blox'))
+	.then(Mongo.find('BloxSchedule'))
+	.then(Mongo.send(res));
+});
 
+app.post('/schedule', function (req, res) {
+	Mongo.read(req)
+	.then(Mongo.connect('blox'))
+	.then(Mongo.insert('BloxSchedule'))
+	.then(Mongo.send(res));
+});
+
+app.put('/schedule', function (req, res) {
+	Mongo.read(req)
+	.then(Mongo.connect('blox'))
+	.then(Mongo.update('BloxSchedule'))
+	.then(Mongo.send(res));
+});
+
+app.delete('/schedule', function (req, res) {
+	Mongo.read(req)
+	.then(Mongo.connect('blox'))
+	.then(Mongo.delete('BloxSchedule'))
+	.then(Mongo.send(res));
+});
+
+// TODO: match GET requests with a view-only page
 app.get('/:scheduleId', function(req, res) {
 	var scheduleId = req.params.scheduleId;
 	res.render('pages/', {scheduleId: scheduleId});
@@ -36,3 +59,5 @@ app.get('/:scheduleId', function(req, res) {
 app.listen(app.get('port'), function() {
 	console.log('Node app is running on port', app.get('port'));
 });
+
+

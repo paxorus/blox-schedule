@@ -21,7 +21,7 @@
 </div>
 
 <select id="dropdown"></select>
-<button id="makeDef" onclick="localStore()">Make Default</button>
+<button id="make-default" onclick="localStore()">Make Default</button>
 <button id="save" onclick="savify()">Save</button>
 <button id="edit" onclick="toggleDisplay(textInput.style)">Edit</button>
 <button id="delete" onclick="deleteSchedule()">Delete</button>
@@ -34,10 +34,12 @@
 <script src="javascripts/dom.js"></script>
 <script>
 Parse.initialize("cALqdsddeWt4oIctybVWtDPa7MnWQuhZjEdXsQHn","hX5H5BnVA1gu8Ue2W0P34bl9bDm3t3mkIMWNYDs0");
-var BloxSchedule=Parse.Object.extend("BloxSchedule");// class
-// var blox_schedule=new BloxSchedule();
+var BloxSchedule = Parse.Object.extend("BloxSchedule");// class
+var blox_schedule=new BloxSchedule();
 var query=new Parse.Query("BloxSchedule");
 var queryResults;
+
+// window.db = 
 
 query.notEqualTo("name","test");
 query.find({
@@ -46,6 +48,8 @@ query.find({
         loadOptions(queryResults);
     }
 });
+
+// $("#make-default").
 
 setup();
 </script>
