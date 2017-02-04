@@ -69,16 +69,13 @@ exports.connect = function (dbName) {
 		return new Promise(function (resolve, reject) {
 			var url = exports._url(dbName, mongo.data);
 			MongoClient.connect(url, function (err, db) {
+				console.log(mongo);
 				if (err) {
 					reject(err);
 				}
 				mongo.db = db;
 				resolve(mongo);
 			});
-		}).catch(function (err) {
-			console.log(79);
-			console.log(err);
-			console.log(81);
 		});
 	};
 };
@@ -92,7 +89,7 @@ exports.insert = function (collection) {
 			name: mongo.data.name,
 			schedule: mongo.data.schedule
 		};
-
+		console.log(obj);
 		return new Promise(function (resolve) {
 			mongo.db.collection(collection).insertOne(obj, function (err, result) {
 				if (err) {
@@ -124,6 +121,33 @@ exports.find = function (collection) {
 			});
 		});		
 	};
+};
+
+/**
+ * Returns all schedule name, suitable for GET requests.
+ */
+exports.dump = function (collection) {
+	return function (mongo) {
+		return new Promise(function (resolve) {
+			mongo.cursor = mongo.db.collection(collection).find({}, {name: 1, _id: 0});
+			exports._collect(mongo, resolve);
+		});
+	};
+};
+
+exports._collect = function (mongo, then) {
+	var docs = [];
+	mongo.cursor.each(function(err, doc) {
+		if (err) {
+			throw err;
+		}
+		if (doc != null) {
+			docs.push(doc);
+		} else {
+			mongo.db.close();
+			then(docs);
+		}
+	});
 };
 
 /**

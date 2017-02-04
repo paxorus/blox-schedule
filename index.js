@@ -21,6 +21,13 @@ app.get('/admin', function(req, res) {
 	res.render('pages/admin');// should require username and password
 });
 
+app.get('/schedule', function (req, res) {
+	Mongo.data({})
+	.then(Mongo.connect('blox'))
+	.then(Mongo.dump('BloxSchedule'))
+	.then(Mongo.send(res));
+});
+
 app.get('/schedule/:scheduleId', function (req, res) {
 	Mongo.data({name: req.params.scheduleId})
 	.then(Mongo.connect('blox'))

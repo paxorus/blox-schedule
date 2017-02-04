@@ -21,37 +21,25 @@
 </div>
 
 <select id="dropdown"></select>
-<button id="make-default" onclick="localStore()">Make Default</button>
-<button id="save" onclick="savify()">Save</button>
-<button id="edit" onclick="toggleDisplay(textInput.style)">Edit</button>
-<button id="delete" onclick="deleteSchedule()">Delete</button>
-<button id="clone" onclick="cloneSchedule()">Clone</button>
-<textarea id="textInput" style="display:none"></textarea>
+<button id="make-default">Make Default</button>
+<button id="save">Save</button>
+<button id="edit">Edit</button>
+<button id="delete">Delete</button>
+<button id="clone">Clone</button>
+<textarea id="text-input" style="display:none"></textarea>
 
 <script src="javascripts/jquery.js"></script>
-<script src="https://www.parsecdn.com/js/parse-1.2.19.min.js"></script>
+<script src="javascripts/events.js"></script>
 <script src="javascripts/common.js"></script>
 <script src="javascripts/dom.js"></script>
 <script>
-Parse.initialize("cALqdsddeWt4oIctybVWtDPa7MnWQuhZjEdXsQHn","hX5H5BnVA1gu8Ue2W0P34bl9bDm3t3mkIMWNYDs0");
-var BloxSchedule = Parse.Object.extend("BloxSchedule");// class
-var blox_schedule=new BloxSchedule();
-var query=new Parse.Query("BloxSchedule");
-var queryResults;
+ScheduleView.setup();
 
-// window.db = 
-
-query.notEqualTo("name","test");
-query.find({
-    success:function(results){
-        queryResults=results;
-        loadOptions(queryResults);
-    }
+$.ajax({
+    url: "/schedule",
+    method: "GET",
+    success: loadOptions
 });
-
-// $("#make-default").
-
-setup();
 </script>
 
 </body>

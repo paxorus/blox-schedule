@@ -1,148 +1,183 @@
-// var blox;
-
-function savify() {// 'Save to Cloud'
-	var obj = queryResults[parseInt(dropdown.value, 10)];
-	obj.set("schedule", textInput.value);
-	obj.save();
-}
-
-function toggleDisplay(style){
-	if (style.display == "block") {
-		style.display = "none";
-		edit.textContent = "Edit";
-		decrypt();
-	} else {
-		style.display = "block";
-		edit.textContent = "Done";
-	}
-}
-
 /**
- * Convert data to blox (time span blocks) and plot on grid.
+ * Prakhar Sahay 08/24/2014
  *
+ * 
  */
 
-function decrypt() {
-	// clear current schedule
-	$(".block").remove();
 
-	// data -> blox
-	var courses = textInput.value.split(",");
-	for (var i in courses) {// for each courseData string
-		var data = courses[i].split(";");
-		var course = new Class(data[0], data[1], data[2], data[3]);
 
-	    // customize newdiv and then plot
+var ScheduleView = {
 
-	    var div = $("<div>", {class: "block"});
-	    // set color
-	    div.css("background-color", course.color);
-	    if (course.place != "???") {
-		    div.attr("title", course.place);
+	load: function (name) {
+		$.ajax({
+			url: "/schedule/" + name,
+			method: "GET",
+			success: function(data, status) {
+				$("#text-input").val(data.schedule);
+				$("title").text("::" + name + "::");
+				localStorage.currentSchedule = name;
+				ScheduleView.display(data.schedule);
+			}
+		});
+	},
+
+	/**
+	 * Sets up content container with lines and times.
+	 */
+	setup: function () {
+		$("#contain").html("");
+
+		// adjust grey container, 25px padding
+
+		// -50 for space, -16 for body, fixed as multiple of 8	
+		var containWidth = Math.floor((window.innerWidth - 66) / 8) * 8;
+		// -50 for space, -16 for body, -42 for header (16 times)
+		var containHeight = Math.floor((window.innerHeight - 108) / 16) * 16 + 2;
+		window.TIME_HEIGHT = (containHeight - 2) / 16 - 2;
+		window.DAYS_WIDTH = containWidth / 8 - 20;
+		window.DAYS_HEIGHT = 20;
+
+		var contain = $("#contain");
+		$("#containDays").width(containWidth);
+		contain.width(containWidth);
+		contain.height(containHeight);
+
+		$(".days").width(window.DAYS_WIDTH);
+		$(".days").height(window.DAYS_HEIGHT);
+
+		// adjust line left and width
+		var line = $("<div>", {class: "line", width: 7 / 8 * containWidth});
+		line.css("left", containWidth / 8);
+
+		var time = $("<div>", {class: "time"});
+		time.height(window.TIME_HEIGHT);
+		time.css("line-height", window.TIME_HEIGHT + "px");
+		time.width(containWidth / 8);
+
+		// add pairs of lineNode>line and timeNode>time
+
+		var lineNode = $("<div>");
+		lineNode.append(line.clone());
+
+		var timeNode = $("<div>");
+
+		for (var j = 0; j < 16; j ++) {
+			var hourRange = (j + 8) % 12 + "-" + (j + 9) % 12;// "5-6"
+			var newTime = time.clone();
+			newTime.text(hourRange);
+			var newTimeNode = timeNode.clone();
+			newTimeNode.append(newTime);
+
+			contain.append(lineNode.clone());
+			contain.append(newTimeNode);
 		}
-		// set opacity
-	    div.css("opacity", course.trans ? 0.5 : 1.0);
+		contain.append(lineNode.clone());
+	},
 
-	    // for each time span, make block
-	    for (var j in course.times) {
-	    	plot(div.clone(), course.times[j], course.name);
-	    }
+
+	/**
+	 * Convert data to blox (time span blocks) and plot on grid.
+	 */
+	display: function (scheduleData) {
+		this.clear();
+
+		// data -> blox
+		var courses = scheduleData.split(",");
+
+		courses.forEach(function (course) {// for each courseData string
+			var data = course.split(";");
+			var course = new Course(data[0], data[1], data[2], data[3]);
+
+		    // customize newdiv with background-color, title, and opacity
+		    var div = $("<div>", {class: "block"});
+		    div.css("background-color", course.color);
+		    if (course.place != "") {
+			    div.attr("title", course.place);
+			}
+		    div.css("opacity", course.trans ? 0.5 : 1.0);
+
+		    // for each time span, make block
+		    course.times.forEach(function (timeSpan) {
+		    	ScheduleView.plotDiv(div.clone(), timeSpan, course.name);
+		    });
+		});
+	},
+
+	// given styled div and "1~13~14" produce its block
+	plotDiv: function (div, time, name) {
+		div.text(name);
+
+		var timeArr = time.split("~");// ["1","13","14"]
+		var hours = parseFloat(timeArr[2]) - parseFloat(timeArr[1]);// 14-13
+
+		div.width(window.DAYS_WIDTH);
+		var height = (hours * (window.TIME_HEIGHT + 2) - 2) + "px";
+		div.height(height);
+		div.css("line-height", height);
+
+		div.css("top", 2 + (window.TIME_HEIGHT + 2) * (parseFloat(timeArr[1]) - 8));
+		div.css("left", (window.DAYS_WIDTH + 20) * (parseInt(timeArr[0], 10) + 1));// + 20 for padding
+
+		$("#contain").append(div);
+	},
+
+	// clear current schedule
+	clear: function () {
+		$(".block").remove();
 	}
 }
 
-// given styled div and "1~13~14" produce its block
-function plot(div, time_str, name){
-	// var div = div_template.clone();
-	div.text(name);
 
-	var time_arr = time_str.split("~");// ["1","13","14"]
-	var hours = parseFloat(time_arr[2]) - parseFloat(time_arr[1]);// 14-13
 
-	div.width(window.DAYS_WIDTH);
-	var height = (hours * (window.TIME_HEIGHT + 2) - 2) + "px";
-	div.height(height);
-	div.css("line-height", height);
-
-	div.css("top", 2 + (window.TIME_HEIGHT + 2) * (parseFloat(time_arr[1]) - 8));
-	div.css("left", (window.DAYS_WIDTH + 20) * (parseInt(time_arr[0], 10) + 1));// + 20 for padding
-
-	$("#contain").append(div);
-}
-
-function Class(name, color, time_str, place){// four strings from split(';')
+function Course(name, color, timeString, place){// four strings from split(';')
 	this.trans = (name[0] == 'z');
 	this.name = name.substring(this.trans);// set boolean .trans,set name 
     this.color = color;
     this.place = place;
 
     // expand times from "134(13~14),5(12.5~14)"
-    this.times = [];
-    var times = time_str.split('+');// [134(13~14), 5(12.5~14)]
+    var times = [];
+    var timeStrings = timeString.split('+');// [134(13~14), 5(12.5~14)]
 
-    for (var i = 0; i < times.length; i ++){
-    	var index = times[i].indexOf("(");
-    	if (index > -1) {// multiday push
-    		pushAllDays(this.times, times[i], index);
-    	} else {
-    		this.times.push(times[i]);// normal push
+    timeStrings.forEach(function (time) {
+    	var index = time.indexOf("(");
+    	if (index >= 0) {// "134(13~14)"
+		    var days = time.substring(0, index).split("");// "134"
+		    var hours = time.substring(index + 1, time.length - 1);// "13~14"
+		    days.forEach(function (day) {
+				times.push(day + "~" + hours);
+		    });
+    	} else {// "1~3~4"
+    		times.push(time);// single day
     	}
-    }
+    });
+    this.times = times;
 }
 
-function pushAllDays(array, multiday_str, index){
-    var day_numbers = multiday_str.substring(0, index);// "134"
-    var hours = multiday_str.substring(index + 1, multiday_str.length - 1);// "13~14"
-    for (var i = 0; i < day_numbers.length; i ++) {
-    	array.push(day_numbers[i] + "~" + hours);
-    }
-}
+function loadOptions(data) {
 
-var schedNames;
-function loadOptions(scheds) {
-	schedNames = [];
-	for (var k = 0; k < scheds.length; k ++){
-		var op = document.createElement("option");
-		schedNames.push(op.textContent=scheds[k].get("name"));
-		op.value = k;
-		dropdown.append(op);
-	}
-
-	var index;
-	if ((index = localStorage.default) && schedNames.indexOf(index) >= 0) {
-		index = schedNames.indexOf(index);
-	} else {
-		index = 0;
-	}
-	$("#textInput").val(scheds[index].get("schedule"));
-	$("#dropdown").children()[index].selected = true;
-	$("title").text("::" + scheds[index].get("name") + "::");
-	decrypt();
-}
-
-function localStore() {// upon 'Make Default'
-	var index = parseInt(dropdown.value, 10);
-	localStorage.default = schedNames[index];
-}
-
-function deleteSchedule() {
-	if (confirm("Are you sure?")) {
-		var index = parseInt(dropdown.value,10);
-		queryResults[index].destroy({
-			success: function(obj) {
-				location.reload();
-			}
-		});
-	}
-}
-
-function cloneSchedule() {
-	var bloxSchedule = new BloxSchedule();
-	var name = prompt("Enter a name for the new schedule:");
-	bloxSchedule.set("name", name);
-	bloxSchedule.set("schedule", textInput.value);
-	bloxSchedule.save({
-		success: function(obj){
-			location.reload();
-		}
+	var names = data.map(function (obj) {
+		return obj.name;
 	});
+
+	names.forEach(function (name) {
+		var op = document.createElement("option");
+		op.textContent = name;
+		op.value = name;
+		dropdown.append(op);
+	});
+
+	// TODO: remove this
+	window.scheduleNames = names;
+
+    // set default schedule if none
+    var index = names.indexOf(localStorage.defaultSchedule);
+    if (index >= 0) {
+	    $("#dropdown").children()[index].selected = true;
+    } else {
+    	localStorage.defaultSchedule = names[0];
+    }
+
+    ScheduleView.load(localStorage.defaultSchedule);
 }
+
