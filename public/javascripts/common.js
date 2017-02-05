@@ -1,13 +1,14 @@
 /**
- * Prakhar Sahay 08/24/2014
+ * Holds the implementations of ScheduleView and Course, the app models.
  *
- * 
+ * @author Prakhar Sahay 08/24/2014
  */
-
-
 
 var ScheduleView = {
 
+	/**
+	 * GET a specific schedule by name from the cloud
+	 */
 	load: function (name) {
 		$.ajax({
 			url: "/schedule/" + name,
@@ -17,7 +18,8 @@ var ScheduleView = {
 				$("title").text("::" + name + "::");
 				localStorage.currentSchedule = name;
 				ScheduleView.display(data.schedule);
-			}
+			},
+			error: Notifier.error
 		});
 	},
 
@@ -76,7 +78,7 @@ var ScheduleView = {
 
 
 	/**
-	 * Convert data to blox (time span blocks) and plot on grid.
+	 * Convert provided data to blox (time span blocks) and plot on grid.
 	 */
 	display: function (scheduleData) {
 		this.clear();
@@ -129,7 +131,7 @@ var ScheduleView = {
 
 
 
-function Course(name, color, timeString, place){// four strings from split(';')
+function Course(name, color, timeString, place) {// four strings from split(';')
 	this.trans = (name[0] == 'z');
 	this.name = name.substring(this.trans);// set boolean .trans,set name 
     this.color = color;
@@ -154,6 +156,10 @@ function Course(name, color, timeString, place){// four strings from split(';')
     this.times = times;
 }
 
+
+/**
+ * GET all schedule names from the cloud
+ */
 function loadOptions(data) {
 
 	var names = data.map(function (obj) {
@@ -181,3 +187,20 @@ function loadOptions(data) {
     ScheduleView.load(localStorage.defaultSchedule);
 }
 
+
+var Notifier = {
+	success: function (data) {
+		Notifier.getNotification(data.message, "notification")
+	},
+	error: function (error) {
+		var data = JSON.parse(error.responseText);
+		Notifier.getNotification(data.message, "notification error");
+	},
+	getNotification: function (message, classNames) {
+		var notification = $("<div>", {class: classNames})
+		notification.text(message);
+		$("body").append(notification);
+		notification.css("margin-left", -notification.innerWidth() / 2);
+		notification.fadeOut(5000);		
+	}
+};

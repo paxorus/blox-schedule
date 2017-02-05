@@ -40,3 +40,17 @@ body {
 	border-radius: 5px;
 	padding: 0 10px;
 }
+
+.notification {
+	border-radius: 5px;
+	background-color: #3dbf2b;
+	color: white;
+	padding: 5px 25px;
+	display: inline-block;
+	left: 50%;
+	position: absolute;
+	top: 25px;
+}
+.error {
+	background-color: #ff6666;
+}

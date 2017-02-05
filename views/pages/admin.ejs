@@ -1,3 +1,4 @@
+<!doctype html>
 <html>
 <head>
     <title>Weekly Schedule</title>
@@ -31,7 +32,6 @@
 <script src="javascripts/jquery.js"></script>
 <script src="javascripts/events.js"></script>
 <script src="javascripts/common.js"></script>
-<script src="javascripts/dom.js"></script>
 <script>
 ScheduleView.setup();
 
@@ -39,6 +39,11 @@ $.ajax({
     url: "/schedule",
     method: "GET",
     success: loadOptions
+});
+
+$(window).resize(function () {
+    ScheduleView.setup();
+    ScheduleView.display($("#text-input").val());
 });
 </script>
 

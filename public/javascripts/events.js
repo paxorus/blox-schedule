@@ -1,7 +1,7 @@
 /**
- * Prakhar Sahay 01/30/2017
+ * Controllers for admin actions: Make Default, Save, Edit, Delete, Clone, switch schedules.
  *
- * 
+ * @author Prakhar Sahay 01/30/2017
  */
 
 // Make Default
@@ -14,9 +14,8 @@ $("#save").click(function () {
 	$.ajax({
 		url: "/schedule",
 		method: "PUT",
-		success: function(data, status) {
-			console.log(data);
-		},
+		success: Notifier.success,
+		error: Notifier.error,
 		data: {
 			name: localStorage.currentSchedule,
 			schedule: $("#text-input").val(),
@@ -31,7 +30,7 @@ $("#edit").click(function () {
 	if ($("#text-input").css("display") == "block") {
 		$("#text-input").css("display", "none");
 		$(this).text("Edit");
-		decrypt();
+		ScheduleView.display($("#text-input").val());
 	} else {
 		$("#text-input").css("display", "block");
 		$(this).text("Done");
@@ -47,10 +46,8 @@ $("#delete").click(function () {
 	$.ajax({
 		url: "/schedule",
 		method: "DELETE",
-		success: function(data, status) {
-			console.log(data);
-			// location.reload();
-		},
+		success: Notifier.success,
+		error: Notifier.error,
 		data: {
 			name: localStorage.currentSchedule,
 			username: localStorage.username,
@@ -67,14 +64,19 @@ $("#clone").click(function () {
 		name = prompt("Name is taken. Please enter another name:");
 	}
 
+	if (name === "") {// user hit 'Cancel'
+		return;
+	}
+
 	$.ajax({
 		url: "/schedule",
 		method: "POST",
-		success: function(data, status) {
+		success: function(data) {
 			$("title").text("::" + name + "::");
 			localStorage.currentSchedule = name;
 			window.scheduleNames.push(name);
 			// add option to dropdown
+			Notifier.success(data);
 		},
 		data: {
 			name: name,
@@ -90,12 +92,4 @@ $("#clone").click(function () {
  */
 $("#dropdown").change(function() {
 	ScheduleView.load(event.target.value);
-});
-
-/**
- * TODO: reposition DOM elements instead of page reload
- */
-$(window).resize(function () {
-	ScheduleView.setup();
-	ScheduleView.load(localStorage.currentSchedule);
 });

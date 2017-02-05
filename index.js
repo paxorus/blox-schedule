@@ -1,7 +1,7 @@
 /**
- * Prakhar Sahay 01/16/2017
- *
  * Main application server script.
+ *
+ * @author Prakhar Sahay 01/16/2017
  */
 
 var express = require('express');
@@ -13,6 +13,7 @@ app.use(express.static(__dirname + '/public'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
+/* PAGE ROUTES */
 app.get('/', function(req, res) {
 	res.render('pages/index', {scheduleId: "prakhar"});
 });
@@ -21,6 +22,7 @@ app.get('/admin', function(req, res) {
 	res.render('pages/admin');// should require username and password
 });
 
+// retrieve all schedule names
 app.get('/schedule', function (req, res) {
 	Mongo.data({})
 	.then(Mongo.connect('blox'))
@@ -28,39 +30,53 @@ app.get('/schedule', function (req, res) {
 	.then(Mongo.send(res));
 });
 
+app.get('/:scheduleName', function(req, res) {
+	Mongo.data({name: req.params.scheduleName})
+	.then(Mongo.connect('blox'))
+	.then(Mongo.find('BloxSchedule'))
+	.then(Mongo.render(res, 'pages/'))
+	.catch(Mongo.missing(res, 'pages/404.ejs'));
+});
+
+
+/* APP ROUTES */
+// retrieve a specific document
 app.get('/schedule/:scheduleId', function (req, res) {
 	Mongo.data({name: req.params.scheduleId})
 	.then(Mongo.connect('blox'))
 	.then(Mongo.find('BloxSchedule'))
-	.then(Mongo.send(res));
+	.then(Mongo.send(res))
+	.catch(Mongo.error(res));
 });
 
+// password-protected, insert a new document
 app.post('/schedule', function (req, res) {
 	Mongo.read(req)
 	.then(Mongo.connect('blox'))
 	.then(Mongo.insert('BloxSchedule'))
-	.then(Mongo.send(res));
+	.then(Mongo.send(res))
+	.catch(Mongo.error(res));
 });
 
+// password-protected, update a document by name
 app.put('/schedule', function (req, res) {
 	Mongo.read(req)
 	.then(Mongo.connect('blox'))
 	.then(Mongo.update('BloxSchedule'))
-	.then(Mongo.send(res));
+	.then(Mongo.send(res))
+	.catch(Mongo.error(res));
 });
 
+// password-protected, delete a document by name
 app.delete('/schedule', function (req, res) {
 	Mongo.read(req)
 	.then(Mongo.connect('blox'))
 	.then(Mongo.delete('BloxSchedule'))
-	.then(Mongo.send(res));
+	.then(Mongo.send(res))
+	.catch(Mongo.error(res));
 });
 
-// TODO: match GET requests with a view-only page
-app.get('/:scheduleId', function(req, res) {
-	var scheduleId = req.params.scheduleId;
-	res.render('pages/', {scheduleId: scheduleId});
-});
+
 
 // for the server console
 app.listen(app.get('port'), function() {

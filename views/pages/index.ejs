@@ -1,6 +1,7 @@
+<!doctype html>
 <html>
 <head>
-    <title>Weekly Schedule</title>
+    <title>::<%= scheduleName %>::</title>
     <link rel="stylesheet" href="stylesheets/index.css">
     <link href="images/mongo.ico" rel="shortcut icon">
 </head>
@@ -20,34 +21,17 @@
 <div id="contain"><!--contain_width x contain_height-->
 </div>
 
-<div id="dropdown" style="display:none"></div>
-<div id="makeDef" style="display:none"></div>
-<div id="save" style="display:none"></div>
-<div id="edit" style="display:none"></div>
-<div id="textInput" style="display:none"></div>
-
 <script src="javascripts/jquery.js"></script>
-<script src="https://www.parsecdn.com/js/parse-1.2.19.min.js"></script>
 <script src="javascripts/common.js"></script>
-<script src="javascripts/dom.js"></script>
 
 <script>
-Parse.initialize("cALqdsddeWt4oIctybVWtDPa7MnWQuhZjEdXsQHn","hX5H5BnVA1gu8Ue2W0P34bl9bDm3t3mkIMWNYDs0");
-var BloxSchedule=Parse.Object.extend("BloxSchedule");// class
-var blox_schedule=new BloxSchedule();
-var query=new Parse.Query("BloxSchedule");
-var queryResults;
+ScheduleView.setup();
+ScheduleView.display("<%= scheduleData %>");
 
-localStorage.default = "<%= scheduleId %>";
-query.notEqualTo("name","test");
-query.find({
-    success:function(results){
-        queryResults=results;
-        loadOptions(queryResults);
-    }
+$(window).resize(function () {
+    ScheduleView.setup();
+    ScheduleView.display("<%= scheduleData %>");
 });
-
-setup();
 </script>
 
 </body>
