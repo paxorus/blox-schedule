@@ -14,15 +14,21 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
 /* PAGE ROUTES */
+// default URL, defaults to index.ejs with "prakhar" schedule
 app.get('/', function(req, res) {
-	res.render('pages/index', {scheduleId: "prakhar"});
+	Mongo.data({name: "prakhar"})
+	.then(Mongo.connect('blox'))
+	.then(Mongo.find('BloxSchedule'))
+	.then(Mongo.render(res, 'pages/'))
+	.catch(Mongo.missing(res, 'pages/404.ejs'));
 });
 
+// admin.ejs
 app.get('/admin', function(req, res) {
 	res.render('pages/admin');// should require username and password
 });
 
-// retrieve all schedule names
+// retrieve all schedule names as JSON
 app.get('/schedule', function (req, res) {
 	Mongo.data({})
 	.then(Mongo.connect('blox'))
@@ -30,6 +36,7 @@ app.get('/schedule', function (req, res) {
 	.then(Mongo.send(res));
 });
 
+// load index.ejs with requested schedule
 app.get('/:scheduleName', function(req, res) {
 	Mongo.data({name: req.params.scheduleName})
 	.then(Mongo.connect('blox'))
