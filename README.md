@@ -2,11 +2,10 @@ blox
 ====
 
 ### What is this?
-A basic Web app to manage and display my weekly schedule. Originally it was built on Parse.js, but after its shutdown in January 2017 I upgraded to Node.js and AWS. The `/admin` page provides basic CRUD utilities, allowing me to switch between and edit any schedule while also  and create and delete. Each schedule automatically gets a link, Express.js
-uniquely named schedule then has a 
+A basic Web app to manage and display my weekly schedule. Originally it was built on Parse.js, but after its shutdown in January 2017 I upgraded to Node.js and AWS. The `/admin` page provides basic CRUD utilities, allowing me to switch between and edit any schedule while also  and create and delete. Express.js dynamically routes to each schedule by name, making it easy to share public links. All this allows me to effectively and easily organize and share my activities.
 
 ### Deploys
-The Web app is deployed [on Heroku](http://seismic-blox.herokuapp.com/). I've password-protected the admin panel for obvious reasons. You can see what the page looks like, but only the dropdown will work.
+The Web app is deployed [on Heroku](http://seismic-blox.herokuapp.com/). I've password-protected the admin panel for obvious reasons. You can still see what the page looks like, but only the dropdown will work.
 
 The development version is on the dev branch. The deployed version is on the master branch and periodicially rebased to dev. A static version will be available for some time [on GitHub Pages](http://paxorus.github.io/blox/view.html) through the gh-pages branch, in case anyone still has the old link.
 
@@ -45,9 +44,8 @@ $("#save").click(function () {
 });
 ```
 
-
 #### Connecting to the cloud
-Each action adds a little information to the `mongo` object, ensuring everything including the original `Request` object is available downstream.
+In MongoHelper.js, each action adds a little information to the `mongo` object, ensuring everything including the original `Request` object is available downstream.
 ```javascript
 exports.connect = function (dbName) {
 	return function (mongo) {
