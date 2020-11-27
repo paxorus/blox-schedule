@@ -13,12 +13,20 @@ app.use(express.static(__dirname + '/public'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
+const Db = {
+	Blox: 'blox-db'
+};
+
+const Collections = {
+	BloxSchedules: 'blox-schedules'
+};
+
 /* PAGE ROUTES */
 // default URL, defaults to index.ejs with "prakhar" schedule
 app.get('/', function(req, res) {
-	Mongo.data({name: "prakhar"})
-	.then(Mongo.connect('blox-db'))
-	.then(Mongo.find('blox-schedules'))
+	Mongo.data({name: 'prakhar'})
+	.then(Mongo.connect(Db.Blox))
+	.then(Mongo.find(Collections.BloxSchedules))
 	.then(Mongo.render(res, 'pages/'))
 	.catch(Mongo.missing(res, 'pages/404.ejs'));
 });
@@ -31,16 +39,17 @@ app.get('/admin', function(req, res) {
 // retrieve all schedule names as JSON
 app.get('/schedule', function (req, res) {
 	Mongo.data({})
-	.then(Mongo.connect('blox-db'))
-	.then(Mongo.dump('blox-schedules'))
-	.then(Mongo.send(res));
+	.then(Mongo.connect(Db.Blox))
+	.then(Mongo.dump(Collections.BloxSchedules))
+	.then(Mongo.send(res))
+	.catch(Mongo.error(res));
 });
 
 // load index.ejs with requested schedule
 app.get('/:scheduleName', function(req, res) {
 	Mongo.data({name: req.params.scheduleName})
-	.then(Mongo.connect('blox-db'))
-	.then(Mongo.find('blox-schedules'))
+	.then(Mongo.connect(Db.Blox))
+	.then(Mongo.find(Collections.BloxSchedules))
 	.then(Mongo.render(res, 'pages/'))
 	.catch(Mongo.missing(res, 'pages/404.ejs'));
 });
@@ -50,35 +59,35 @@ app.get('/:scheduleName', function(req, res) {
 // retrieve a specific document
 app.get('/schedule/:scheduleId', function (req, res) {
 	Mongo.data({name: req.params.scheduleId})
-	.then(Mongo.connect('blox-db'))
-	.then(Mongo.find('blox-schedules'))
+	.then(Mongo.connect(Db.Blox))
+	.then(Mongo.find(Collections.BloxSchedules))
 	.then(Mongo.send(res))
 	.catch(Mongo.error(res));
 });
 
-// password-protected, insert a new document
-app.post('/schedule', function (req, res) {
+// insert a new document
+app.post('/admin/schedule', function (req, res) {
 	Mongo.read(req)
-	.then(Mongo.connect('blox-db'))
-	.then(Mongo.insert('blox-schedules'))
+	.then(Mongo.connect(Db.Blox))
+	.then(Mongo.insert(Collections.BloxSchedules))
 	.then(Mongo.send(res))
 	.catch(Mongo.error(res));
 });
 
-// password-protected, update a document by name
-app.put('/schedule', function (req, res) {
+// update a document by name
+app.put('/admin/schedule', function (req, res) {
 	Mongo.read(req)
-	.then(Mongo.connect('blox-db'))
-	.then(Mongo.update('blox-schedules'))
+	.then(Mongo.connect(Db.Blox))
+	.then(Mongo.update(Collections.BloxSchedules))
 	.then(Mongo.send(res))
 	.catch(Mongo.error(res));
 });
 
-// password-protected, delete a document by name
-app.delete('/schedule', function (req, res) {
+// delete a document by name
+app.delete('/admin/schedule', function (req, res) {
 	Mongo.read(req)
-	.then(Mongo.connect('blox-db'))
-	.then(Mongo.delete('blox-schedules'))
+	.then(Mongo.connect(Db.Blox))
+	.then(Mongo.delete(Collections.BloxSchedules))
 	.then(Mongo.send(res))
 	.catch(Mongo.error(res));
 });

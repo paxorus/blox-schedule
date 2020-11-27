@@ -12,7 +12,7 @@ $("#make-default").click(function () {
 // Save
 $("#save").click(function () {
 	$.ajax({
-		url: "/schedule",
+		url: "/admin/schedule",
 		method: "PUT",
 		success: Notifier.success,
 		error: Notifier.error,
@@ -44,7 +44,7 @@ $("#delete").click(function () {
 	}
 
 	$.ajax({
-		url: "/schedule",
+		url: "/admin/schedule",
 		method: "DELETE",
 		success: Notifier.success,
 		error: Notifier.error,
@@ -69,7 +69,7 @@ $("#clone").click(function () {
 	}
 
 	$.ajax({
-		url: "/schedule",
+		url: "/admin/schedule",
 		method: "POST",
 		success: function(data) {
 			$("title").text("::" + name + "::");
