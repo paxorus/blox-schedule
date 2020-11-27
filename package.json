@@ -28,8 +28,8 @@
   },
   "homepage": "https://github.com/paxorus/blox#readme",
   "dependencies": {
-    "ejs": "2.3.3",
+    "ejs": "^3.1.5",
     "express": "^4.14.0",
-    "mongodb": "2.2.22"
+    "mongodb": "^3.6.3"
   }
 }
