@@ -1,4 +1,4 @@
-blox
+Blox Schedule
 ====
 
 ### What is this?

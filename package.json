@@ -1,5 +1,5 @@
 {
-  "name": "blox",
+  "name": "blox-schedule",
   "version": "1.0.0",
   "description": "Weekly schedule on the cloud",
   "main": "index.js",

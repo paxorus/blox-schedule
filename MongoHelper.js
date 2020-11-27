@@ -6,25 +6,17 @@
  */
 
 var MongoClient = require('mongodb').MongoClient;
-var util = require('util');
 var querystring = require('querystring');
 
-var promise;
 
-/**
- * @private
- */
-exports._url = function (dbName, data) {
-	var format = "mongodb://%s:%s@ds137149.mlab.com:37149/%s";
-	return util.format(format, data.username, data.password, dbName);
+function _url({username, password}) {
+	return `mongodb+srv://${username}:${password}@cluster0.jzpth.mongodb.net?retryWrites=true&w=majority`;
 };
 
 /**
  * Reads a MongoDB Cursor into an array.
- *
- * @private
  */
-exports._collect = function (mongo, then) {
+function _collect(mongo, then) {
 	var docs = [];
 	mongo.cursor.each(function(err, doc) {
 		if (err) {
@@ -33,7 +25,6 @@ exports._collect = function (mongo, then) {
 		if (doc != null) {
 			docs.push(doc);
 		} else {
-			mongo.db.close();
 			then({result: docs});
 		}
 	});
@@ -63,8 +54,8 @@ exports.read = function (req) {
  * @return an initiator pseudo-promise
  */
 exports.data = function (data) {
-	data.username = "readonly";
-	data.password = "readonly";
+	data.username = "blox-schedules-reader";
+	data.password = "ML3kzyWisLD0mT1z";
 	return {
 		then: function (resolve) {
 			return resolve({data: data});
@@ -130,14 +121,16 @@ exports.missing = function (res, page) {
 exports.connect = function (dbName) {
 	return function (mongo) {
 		return new Promise(function (resolve, reject) {
-			var url = exports._url(dbName, mongo.data);
-			MongoClient.connect(url, function (err, db) {
+			var url = _url(mongo.data);
+			const client = new MongoClient(url, {useNewUrlParser: true, useUnifiedTopology: true});
+			client.connect(err => {
 				if (err) {
 					reject(err);
 				}
-				mongo.db = db;
+				mongo.db = client.db(dbName);
 				resolve(mongo);
 			});
+			client.close();
 		});
 	};
 };
@@ -150,7 +143,7 @@ exports.dump = function (collection) {
 	return function (mongo) {
 		return new Promise(function (resolve) {
 			mongo.cursor = mongo.db.collection(collection).find({}, {name: 1, _id: 0});
-			exports._collect(mongo, resolve);
+			_collect(mongo, resolve);
 		});
 	};
 };
@@ -176,7 +169,6 @@ exports.find = function (collection) {
 						message: "No schedule " + obj.name
 					});
 				}
-				mongo.db.close();
 				mongo.result = result;
 				resolve(mongo);
 			});
@@ -200,7 +192,6 @@ exports.insert = function (collection) {
 				if (err) {
 					reject(err);
 				}
-				mongo.db.close();
 				mongo.result = {message: "Created " + obj.name};
 				resolve(mongo);
 			});
@@ -231,7 +222,6 @@ exports.update = function (collection) {
 						message: "No schedule " + selector.name
 					});
 				}
-				mongo.db.close();
 				mongo.result = {message: "Updated " + selector.name};
 				resolve(mongo);
 			});
@@ -259,7 +249,6 @@ exports.delete = function (collection) {
 						message: "No schedule " + selector.name + "."
 					});
 				}
-				mongo.db.close();
 				mongo.result = {message: "Deleted " + selector.name};
 				resolve(mongo);
 			});

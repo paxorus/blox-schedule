@@ -17,8 +17,8 @@ app.set('view engine', 'ejs');
 // default URL, defaults to index.ejs with "prakhar" schedule
 app.get('/', function(req, res) {
 	Mongo.data({name: "prakhar"})
-	.then(Mongo.connect('blox'))
-	.then(Mongo.find('BloxSchedule'))
+	.then(Mongo.connect('blox-db'))
+	.then(Mongo.find('blox-schedules'))
 	.then(Mongo.render(res, 'pages/'))
 	.catch(Mongo.missing(res, 'pages/404.ejs'));
 });
@@ -31,16 +31,16 @@ app.get('/admin', function(req, res) {
 // retrieve all schedule names as JSON
 app.get('/schedule', function (req, res) {
 	Mongo.data({})
-	.then(Mongo.connect('blox'))
-	.then(Mongo.dump('BloxSchedule'))
+	.then(Mongo.connect('blox-db'))
+	.then(Mongo.dump('blox-schedules'))
 	.then(Mongo.send(res));
 });
 
 // load index.ejs with requested schedule
 app.get('/:scheduleName', function(req, res) {
 	Mongo.data({name: req.params.scheduleName})
-	.then(Mongo.connect('blox'))
-	.then(Mongo.find('BloxSchedule'))
+	.then(Mongo.connect('blox-db'))
+	.then(Mongo.find('blox-schedules'))
 	.then(Mongo.render(res, 'pages/'))
 	.catch(Mongo.missing(res, 'pages/404.ejs'));
 });
@@ -50,8 +50,8 @@ app.get('/:scheduleName', function(req, res) {
 // retrieve a specific document
 app.get('/schedule/:scheduleId', function (req, res) {
 	Mongo.data({name: req.params.scheduleId})
-	.then(Mongo.connect('blox'))
-	.then(Mongo.find('BloxSchedule'))
+	.then(Mongo.connect('blox-db'))
+	.then(Mongo.find('blox-schedules'))
 	.then(Mongo.send(res))
 	.catch(Mongo.error(res));
 });
@@ -59,8 +59,8 @@ app.get('/schedule/:scheduleId', function (req, res) {
 // password-protected, insert a new document
 app.post('/schedule', function (req, res) {
 	Mongo.read(req)
-	.then(Mongo.connect('blox'))
-	.then(Mongo.insert('BloxSchedule'))
+	.then(Mongo.connect('blox-db'))
+	.then(Mongo.insert('blox-schedules'))
 	.then(Mongo.send(res))
 	.catch(Mongo.error(res));
 });
@@ -68,8 +68,8 @@ app.post('/schedule', function (req, res) {
 // password-protected, update a document by name
 app.put('/schedule', function (req, res) {
 	Mongo.read(req)
-	.then(Mongo.connect('blox'))
-	.then(Mongo.update('BloxSchedule'))
+	.then(Mongo.connect('blox-db'))
+	.then(Mongo.update('blox-schedules'))
 	.then(Mongo.send(res))
 	.catch(Mongo.error(res));
 });
@@ -77,8 +77,8 @@ app.put('/schedule', function (req, res) {
 // password-protected, delete a document by name
 app.delete('/schedule', function (req, res) {
 	Mongo.read(req)
-	.then(Mongo.connect('blox'))
-	.then(Mongo.delete('BloxSchedule'))
+	.then(Mongo.connect('blox-db'))
+	.then(Mongo.delete('blox-schedules'))
 	.then(Mongo.send(res))
 	.catch(Mongo.error(res));
 });
@@ -89,5 +89,3 @@ app.delete('/schedule', function (req, res) {
 app.listen(app.get('port'), function() {
 	console.log('Node app is running on port', app.get('port'));
 });
-
-
